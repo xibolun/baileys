@@ -2,47 +2,78 @@ package dao
 
 // Add{{.UpperCamelName}} 新增{{.Comment}}
 func Add{{.UpperCamelName}}({{.LowerCamelName}} *model.{{.UpperCamelName}}) (err error) {
-    _, err = db.Engine.Insert({{.LowerCamelName}})
-    return errors.WithStack(err)
-}
-
-// Remove{{.UpperCamelName}} 删除{{.Comment}}
-func Remove{{.UpperCamelName}}(id int) (err error) {
-	_, err = db.Engine.ID(id).Delete(&model.{{.UpperCamelName}}{})
-    return errors.WithStack(err)
-}
-
-// Update{{.UpperCamelName}} 修改{{.Comment}}
-func Update{{.UpperCamelName}}({{.LowerCamelName}} *model.{{.UpperCamelName}}) (err error) {
-	_, err = db.Engine.ID({{.LowerCamelName}}.ID).Update({{.LowerCamelName}})
-    return errors.WithStack(err)
-}
-
-// Get{{.UpperCamelName}} 查询{{.Comment}} 单个
-func Get{{.UpperCamelName}}(id int) ({{.LowerCamelName}} *model.{{.UpperCamelName}}, err error) {
-	{{.LowerCamelName}} = &model.{{.UpperCamelName}}{}
-	exist, err := db.Engine.ID(id).Get({{.LowerCamelName}})
+	err = db.Engine.Create({{.LowerCamelName}}).Error
 	if err != nil {
-        return nil, errors.WithStack(err)
+        return mistake.NewDaoErr(err)
     }
-    if !exist {
-        {{.LowerCamelName}} = nil
+    return
+}
+
+// Remove{{.UpperCamelName}}s 删除{{.Comment}}
+func Remove{{.UpperCamelName}}s(ids ...int64) (affected int64, err error) {
+	r := db.Engine.Delete(&model.{{.UpperCamelName}}{}, ids)
+	affected, err = r.RowsAffected, r.Error
+	if err != nil {
+        err = mistake.NewDaoErr(err)
     }
 	return
 }
 
+// Update{{.UpperCamelName}} 修改{{.Comment}}
+func Update{{.UpperCamelName}}({{.LowerCamelName}} *model.{{.UpperCamelName}}) (err error) {
+	err = db.Engine.Model(&model.{{.UpperCamelName}}{}).Where("id = ?", {{.LowerCamelName}}.ID).Updates({{.LowerCamelName}}).Error
+	if err != nil {
+        return mistake.NewDaoErr(err)
+    }
+	return
+}
+
+// Get{{.UpperCamelName}} 查询{{.Comment}} 单个
+func Get{{.UpperCamelName}}(id int64) ({{.LowerCamelName}} *model.{{.UpperCamelName}}, err error) {
+	{{.LowerCamelName}} = &model.{{.UpperCamelName}}{}
+	err = db.Engine.First({{.LowerCamelName}},id).Error
+	if err == nil {
+    	return
+    }
+    if errors.Is(err, gorm.ErrRecordNotFound) {
+    	return nil, mistake.NewDaoRecordNotFoundErr()
+    }
+    return nil, mistake.NewDaoErr(err)
+}
+
 // Get{{.UpperCamelName}}s 查询{{.Comment}}列表 全部
-func Get{{.UpperCamelName}}s({{.LowerCamelName}} *model.{{.UpperCamelName}}) ({{.LowerCamelName}}s *[]model.{{.UpperCamelName}}, err error) {
-	{{.LowerCamelName}}s = &[]model.{{.UpperCamelName}}{}
-    err = db.Engine.Find({{.LowerCamelName}}s, {{.LowerCamelName}})
-    err = errors.WithStack(err)
-    return
+func Get{{.UpperCamelName}}s(cond *model.{{.UpperCamelName}}) ({{.LowerCamelName}}s []*model.{{.UpperCamelName}}, err error) {
+	err = db.Engine.Where(cond).Find(&{{.LowerCamelName}}s).Error
+	if err == nil {
+		return
+	}
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, mistake.NewDaoRecordNotFoundErr()
+	}
+	return nil, mistake.NewDaoErr(err)
 }
 
 // Get{{.UpperCamelName}}sPage 查询{{.Comment}} 分页
-func Get{{.UpperCamelName}}sPage(page, pageSize int, {{.LowerCamelName}} *model.{{.UpperCamelName}}) ({{.LowerCamelName}}s *[]model.{{.UpperCamelName}}, total int64, err error) {
-	{{.LowerCamelName}}s = &[]model.{{.UpperCamelName}}{}
-    total, err = pager.Help(page, pageSize, {{.LowerCamelName}}s, {{.LowerCamelName}}, db.Engine.NewSession())
-    err = errors.WithStack(err)
-    return
+func Get{{.UpperCamelName}}sPage(page, pageSize int, cond *model.{{.UpperCamelName}}) ({{.LowerCamelName}}s []*model.{{.UpperCamelName}}, total int64, err error) {
+    err = db.Engine.Where(cond).Offset(page).Limit(pageSize).Find(&{{.LowerCamelName}}s).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, 0, mistake.NewDaoRecordNotFoundErr()
+	}
+	if err != nil {
+		return nil, 0, mistake.NewDaoErr(err)
+	}
+	total, err = Count{{.UpperCamelName}}(cond)
+	if err != nil {
+		return nil, 0, err
+	}
+	return
+}
+
+// Count{{.UpperCamelName}} 查询{{.Comment}} 总数
+func Count{{.UpperCamelName}}(cond *model.{{.UpperCamelName}}) (count int64, err error) {
+	err = db.Engine.Model(&model.{{.UpperCamelName}}{}).Where(cond).Count(&count).Error
+	if err != nil {
+		err = mistake.NewDaoErr(err)
+	}
+	return
 }

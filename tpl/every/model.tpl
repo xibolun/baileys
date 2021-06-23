@@ -8,5 +8,5 @@ type {{ .UpperCamelName}} struct {
 
 // TableName {{ .Comment}} 表名
 func ({{ .UpperCamelName}}) TableName() string {
-    return "{{ .UnderlineName}}"
+	return "{{ .UnderlineName}}"
 }

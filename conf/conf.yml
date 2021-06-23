@@ -1,42 +1,68 @@
+# web端口
+http_port: "5272"
+
 # mysql连接
-connection: "root:1qaz2wsx@(127.0.0.1:3306)/test?charset=utf8"
+connection: "qstack:123456@tcp(10.20.74.41:3306)/matrix?charset=utf8mb4&parseTime=True&loc=Local"
+
+# 表名的后缀，有些人喜欢将表名加上后缀 _tab 生成的时候需要去除 则在下方填入
+table_name_suffix: ""
+
+# 表名注释的后悔，如 ： 用户表，在生成的时候需要去掉最后一个字 '表' 则在下方填入
+table_comment_suffix: "表"
 
 # every文件夹下的所有模板 所对应的生成目录
 every_tpl_gen_path:
-  api: "./gen/api/"
-  controller: "./gen/controller/" 
-  dao: "./gen/dao/"
-  model: "./gen/model/"
-  service: "./gen/service/"
-  val: "./gen/val/"
+  model: "/Users/pgy/project/qiniu/zion/server/repo/zion/model/"
+  dao: "/Users/pgy/project/qiniu/zion/server/repo/zion/dao/"
+
+  service: "/Users/pgy/project/qiniu/zion/server/biz/zion/service/"
+  controller: "/Users/pgy/project/qiniu/zion/server/biz/zion/controller/"
+  router: "/Users/pgy/project/qiniu/zion/server/biz/zion/controller/"
+  val: "/Users/pgy/project/qiniu/zion/server/biz/zion/val/"
+
+  api: "/Users/pgy/project/qiniu/zion/api/"
+  vue: "/Users/pgy/project/qiniu/zion_portal/src/api/"
+  tablejson: "/tmp/json/"
+  formjson: "/tmp/json/"
 
 # one文件夹下的所有模板 对应的生成目录
 one_tpl_gen_path:
-  router: "./gen/router/"
 
-# 表名的前缀，有人喜欢在表名之前加入前缀
-table_name_prefix: "mm_"
-
-# 表名的后缀，有些人喜欢将表名加上后缀 _tab 生成的时候需要去除 则在下方填入
-table_name_suffix: "_tab"
-
-# 表名注释的后缀，如 ： 用户表，在生成的时候需要去掉最后一个 '表' 则在下方填入
-table_comment_suffix: "表"
-  
-# 生成的文件是否包含后缀 如果为true，生成的文件会添加模板的名称作为后缀，如user_model.go
+# 生成的文件是否包含后缀 如果为true生成的文件会添加模板的名称作为后缀，如user_model.go
 gen_file_suffix: true
 
-# 是否进行自动导包，如果为true，会对生成的文件进行自动导包，所以生成的目录最好放在你的gopath下面
-auto_import: true
-
-# 数据库字段名称是否为小驼峰命名，如orderName，不建议使用小驼峰，这个配置可能会用于一些特殊用户
-table_field_name_is_lower_camel_name: false
-
 # orm 框架配置 可选项："xorm" "gorm"
-orm_name: "xorm"
+orm_name: "gorm"
+
+# 是否进行自动导包，如果为true，会对生成的文件进行自动导包，所以生成的目录最好放在你的gopath下面
+auto_import: false
 
 # 一些特殊的数据库映射关系，比如id，我们希望直接映射为ID 而不是 Id 也不要出现i_d
 mapping:
   - "ID"
   - "IP"
+  - "IDC"
+  - "API"
+  - UUID
+  - EventID
+  - AgentIP
+  - TrapoID
+  - HostName
+  - TrapTime
+  - CIDR
+  - "BIOS"
+  - "UEFI"
+  - "URL"
+  - "CIDR"
+  - "DNS"
+  - "SN"
+  - "MAC"
+  - "OOB"
+  - "NIC"
+  - "CPU"
+  - "RAID"
+  - "PCI"
+  - "HBA"
+  - "LLDP"
+  - "BootOSIP"
 

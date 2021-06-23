@@ -105,6 +105,7 @@ func createFieldData(column *core.Column, table *core.Table) entity.FieldData {
 	fd.Type = infoCreator.CreateTypeString()
 	fd.ORMTag = infoCreator.CreateORMTag()
 	fd.ValTag = infoCreator.CreateValTag()
+	infoCreator.CreateExt(&fd)
 
 	return fd
 }

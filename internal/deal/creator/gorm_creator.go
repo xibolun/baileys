@@ -2,6 +2,7 @@ package creator
 
 import (
 	"fmt"
+	"github.com/LinkinStars/baileys/internal/entity"
 	"strconv"
 	"strings"
 
@@ -56,6 +57,11 @@ func (d *MyStructInfoCreatorForGORM) CreateORMTag() string {
 	}
 
 	return fmt.Sprintf("`"+`gorm:"column:%s;type:%s%s"`+"`", col.Name, sqlTypeStr, res)
+}
+
+// CreateORMTag 生成字段的orm框架标签
+func (d *MyStructInfoCreatorForGORM) CreateExt(fd *entity.FieldData) {
+	fd.Required = d.Column.Nullable
 }
 
 // CreateValTag 生成字段的val框架标签

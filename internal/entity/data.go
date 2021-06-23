@@ -18,4 +18,5 @@ type FieldData struct {
 	Comment        string // 字段注释
 	ORMTag         string // orm框架的标签
 	ValTag         string // 验证框架的标签
+	Required       bool   // 是否必录
 }

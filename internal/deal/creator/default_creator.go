@@ -2,6 +2,7 @@ package creator
 
 import (
 	"fmt"
+	"github.com/LinkinStars/baileys/internal/entity"
 	"sort"
 	"strconv"
 	"strings"
@@ -171,4 +172,9 @@ func (d *DefaultStructInfoCreator) CreateValTag() string {
 	}
 	tag += ` comment:"` + d.Column.Comment + `"`
 	return tag
+}
+
+// CreateExt 生成字段的val框架标签
+func (d *DefaultStructInfoCreator) CreateExt(fd *entity.FieldData) {
+	fd.Required = d.Column.Nullable
 }

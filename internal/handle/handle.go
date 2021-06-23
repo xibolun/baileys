@@ -21,6 +21,9 @@ var (
 		"UnderlineStr2Strikethrough": util.UnderlineStr2Strikethrough,
 		"ChangeValTagForUpdate":      util.ChangeValTagForUpdate,
 		"ReplaceTime2TimesISOTime":   util.ReplaceTime2TimesISOTime,
+		"GetElementFormElType":       util.GetElementFormElType,
+		"GetAsyncValidatorType":      util.GetAsyncValidatorType,
+		"Mul":                        util.Mul,
 		"ToUpper":                    strings.ToUpper,
 		"ToLower":                    strings.ToLower,
 	}
