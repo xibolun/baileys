@@ -176,5 +176,5 @@ func (d *DefaultStructInfoCreator) CreateValTag() string {
 
 // CreateExt 生成字段的val框架标签
 func (d *DefaultStructInfoCreator) CreateExt(fd *entity.FieldData) {
-	fd.Required = d.Column.Nullable
+	fd.Required = !d.Column.Nullable
 }
